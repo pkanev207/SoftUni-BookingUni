@@ -1,0 +1,16 @@
+<h2>Register Page</h2>
+
+<div class="form-container">
+    <form class="form" action="/auth/register" method="post">
+        <label for="username">Username:
+            <input type="text" id="username" name="username" value="{{data.username}}">
+        </label>
+        <label for="password">Password:
+            <input type="password" id="password" name="password">
+        </label>
+        <label for="repass">Repeat Password:
+            <input type="password" id="repass" name="repass">
+        </label>
+        <button>Register</button>
+    </form>
+</div>

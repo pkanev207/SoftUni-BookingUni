@@ -1,94 +1,32 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="en">
 
-    <head>
-        <meta charset="utf-8">
-        <title>{{ title }}</title>
-        <meta name="author" content="Your Name">
-        <meta name="description" content="Example description">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="">
-        <link rel="icon" type="image/x-icon" href="" />
-        <style>
-            html {
-                background-color: antiquewhite;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
 
-            body {
-                margin: 20px;
-                padding: 10px;
-            }
+<body>
+    <div id="container">
+        <nav>
+            <div class="left-container">
+                <ul>
+                    <li><a href="">Home</a></li>
+                    <li><a href="">Add +</a></li>
+                </ul>
+            </div>
+            <div class="right-container">
+                <a href="" class="log-out">{{name}}</a>
+                <a href="" class="log-out">Logout</a>
+            </div>
+        </nav>
 
-            nav {
-                display: flex;
-                align-items: center;
-                justify-content: center;
+        {{{body}}}
 
-            }
+        <footer>@SoftUni - JS Back-end - BookingUni 2020</footer>
+    </div>
 
-            h1 {
-                text-align: center;
-            }
-
-            a {
-                font-size: large;
-                margin: 20px;
-                text-decoration: none;
-                display: inline-block;
-            }
-
-            a:hover {
-                text-decoration: underline;
-                cursor: pointer;
-            }
-
-            .form {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-end;
-                gap: 6px;
-            }
-
-            .form-container {
-                display: flex;
-                align-self: center;
-                margin-left: 30px;
-            }
-
-            .error {
-                font-size: larger;
-                border: 2px solid tomato;
-                text-align: center;
-            }
-
-        </style>
-    </head>
-
-    <body>
-        <header>
-            <h1>Exam Prep</h1>
-        </header>
-        <main>
-            <nav>
-                <a href="/">Home</a>
-                <a href="/auth/login">Login</a>
-                <a href="/auth/register">Register</a>
-                <a href="/auth/logout">Logout</a>
-            </nav>
-
-            {{#if errors}}
-                <div class="error">
-                    {{#each errors }}
-                        <p>{{this}}</p>
-                    {{/each}}
-                </div>
-            {{/if}}
-
-            {{{body}}}
-
-        </main>
-        <footer></footer>
-        <script type="text/javascript" src=""></script>
-    </body>
+</body>
 
 </html>

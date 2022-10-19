@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const { hash, compare } = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
@@ -14,7 +14,7 @@ async function register(username, password) {
         throw new Error('Username is taken!');
     }
 
-    const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+    const hashedPassword = await hash(password, SALT_ROUNDS);
 
     const user = await User.create({ username, hashedPassword });
     // const user = new User({ email, hashedPassword });
@@ -33,7 +33,7 @@ async function login(username, password) {
         throw new Error('Incorrect username or password!');
     }
 
-    const hasMatch = await bcrypt.compare(password, user.hashedPassword);
+    const hasMatch = await compare(password, user.hashedPassword);
 
     if (!hasMatch) {
         throw new Error('Incorrect username or password!');
@@ -50,8 +50,8 @@ function createSession({ _id, username }) {
     return token;
 }
 
-function verifyToken() {
-
+function verifyToken(token) {
+    return jwt.verify(token, JWT_SECRET);
 }
 
 module.exports = {

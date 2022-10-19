@@ -2,6 +2,7 @@ const router = require('express').Router();
 const userService = require('../services/userService');
 const { parseError } = require('../util/errorParser');
 
+
 router.get('/register', (req, res) => {
     // TODO replace with actual view from assignment
     res.render('register', { title: 'Register Page' });
@@ -19,7 +20,7 @@ router.post('/register', async (req, res) => {
 
         // TODO check assignment to see if register creates session
         res.cookie('token', token);
-        res.redirect('/');
+        res.redirect('/');  // TODO check for redirect requirements
     } catch (error) {
         console.log(error);
         const errors = parseError(error);
@@ -33,9 +34,12 @@ router.post('/register', async (req, res) => {
     }
 });
 
+
 router.get('/login', (req, res) => {
+    // TODO replace with actual view from assignment
     res.render('login', { title: 'Login Page' });
 });
+
 
 router.post('/login', async (req, res) => {
     try {
@@ -46,7 +50,7 @@ router.post('/login', async (req, res) => {
         const token = await userService.login(req.body.username, req.body.password);
 
         res.cookie('token', token);
-        res.redirect('/');
+        res.redirect('/');  // TODO check for redirect requirements
     } catch (error) {
         const errors = parseError(error);
 
@@ -57,5 +61,12 @@ router.post('/login', async (req, res) => {
         });
     }
 });
+
+
+router.get('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.redirect('/');
+});
+
 
 module.exports = router;

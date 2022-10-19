@@ -1,6 +1,8 @@
 const { Schema, model, Types: { ObjectId } } = require('mongoose');
 // const NAME_PATTERN = /^[a-zA-Z-]+$/;
 // const EMAIL_PATTERN = /^([a-zA-Z]+)@([a-zA-Z]+)\.([a-zA-Z]+)$/;
+// const PASSWORD_PATTERN = /[a-zA-Z0-9]{5,}/;
+// The password should be at least 5 characters long and should consist only english letters and digits
 
 // TODO add User properties and validation according to assignment
 const userSchema = new Schema({

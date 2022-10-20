@@ -1,12 +1,23 @@
 const { Schema, model, Types: { ObjectId } } = require('mongoose');
 // const NAME_PATTERN = /^[a-zA-Z-]+$/;
 // const EMAIL_PATTERN = /^([a-zA-Z]+)@([a-zA-Z]+)\.([a-zA-Z]+)$/;
-// const PASSWORD_PATTERN = /[a-zA-Z0-9]{5,}/;
-// The password should be at least 5 characters long and should consist only english letters and digits
+// const PASSWORD_PATTERN = /^[a-zA-Z0-9]{5,}$/;    The password should be at least 5 characters long and should consist only english letters and digits
+// const URL_PATTERN = /^http?:\/\/(.+)$/;
 
 // TODO add User properties and validation according to assignment
 const userSchema = new Schema({
-    username: { type: String, required: true, unique: true, minlength: [3, 'Username must be at least 3 characters long!'] },
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        match: [/^[a-zA-Z0-9]+$/i, 'Username may contain only english letters and numbers'],
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        // match: [/^[a-zA-Z0-9]@[a-zA-Z0-9]+\.[a-zA-Z]+$/i, 'Email may contain only english letters and numbers'],
+    },
     hashedPassword: { type: String, required: true },
     // trips: { type: [ObjectId], ref: 'Trip', default: [] },
 });
@@ -16,6 +27,11 @@ userSchema.index({ username: 1 }, {
     collation: { locale: 'en', strength: 2 },
 });
 // strength 2 -> case insensitive
+
+userSchema.index({ email: 1 }, {
+    unique: true,
+    collation: { locale: 'en', strength: 2 }
+});
 
 const User = model('User', userSchema);
 

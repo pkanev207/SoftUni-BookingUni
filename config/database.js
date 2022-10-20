@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // require('../models/User');
 
 // TODO change database name
-const dbName = 'skeletonDb';
+const dbName = 'booking-uni';
 const CONNECTION_STRING = `mongodb://127.0.0.1:27017/${dbName}`;
 // const CONNECTION_STRING = `mongodb://localhost:27017/${dbName}`;
 

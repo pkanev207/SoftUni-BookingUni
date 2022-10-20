@@ -1,15 +1,18 @@
+const validator = require('validator');
 const router = require('express').Router();
 const userService = require('../services/userService');
 const { parseError } = require('../util/errorParser');
 
 
 router.get('/register', (req, res) => {
-    // TODO replace with actual view from assignment
     res.render('register', { title: 'Register Page' });
 });
 
 router.post('/register', async (req, res) => {
     try {
+        if (validator.isEmail(req.body.email) == false) {
+            throw new Error('Invalid email!');
+        }
         if (req.body.username.trim() == '' || req.body.password.trim() == '') {
             throw new Error('All fields are required!');
         }
@@ -18,9 +21,8 @@ router.post('/register', async (req, res) => {
         }
         const token = await userService.register(req.body.username, req.body.password);
 
-        // TODO check assignment to see if register creates session
         res.cookie('token', token);
-        res.redirect('/');  // TODO check for redirect requirements
+        res.redirect('/');
     } catch (error) {
         console.log(error);
         const errors = parseError(error);

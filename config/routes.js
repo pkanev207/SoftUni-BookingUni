@@ -1,9 +1,14 @@
 const homeController = require('../controllers/homeController');
 const authController = require('../controllers/authController');
+const hotelController = require('../controllers/hotelController');
+const profileController = require('../controllers/profileController');
 
 module.exports = (app) => {
     app.use('/', homeController);
     app.use('/auth', authController);
+    app.use('/hotel', hotelController);
+    // '/hotel/:id/details' - to see the room
+    app.use('/profile', profileController);
 
     // app.get('/error', (req, res, next) => {
     //     throw new Error('propagating error');

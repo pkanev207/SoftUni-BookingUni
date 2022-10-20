@@ -3,10 +3,12 @@ const authController = require('../controllers/authController');
 const hotelController = require('../controllers/hotelController');
 const profileController = require('../controllers/profileController');
 
+const { hasUser } = require('../middleware/guards');
+
 module.exports = (app) => {
     app.use('/', homeController);
     app.use('/auth', authController);
-    app.use('/hotel', hotelController);
+    app.use('/hotel', hasUser(), hotelController);
     // '/hotel/:id/details' - to see the room
     app.use('/profile', profileController);
 

@@ -8,6 +8,7 @@ module.exports = () => (req, res, next) => {
             const userData = verifyToken(token);
             // console.log('Read successful, user >>>', userData);
             req.user = userData;
+            res.locals.username = userData.username;
             // res.locals.user = userData;
             // res.locals.hasUser = true;
         } catch (err) {

@@ -1,9 +1,9 @@
-function isUser() {
+function hasUser() {
     return function (req, res, next) {
         if (req.user) {
             next();
         } else {
-            res.redirect('/login');
+            res.redirect('/auth/login');
         }
     };
 }
@@ -35,7 +35,7 @@ function isOwner() {
 }
 
 module.exports = {
-    isUser,
+    hasUser,
     isGuest,
     isOwner
 };

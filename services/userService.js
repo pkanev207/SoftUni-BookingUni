@@ -7,16 +7,20 @@ const JWT_SECRET = 'supersecret';
 const SALT_ROUNDS = 10;
 
 
-async function register(username, password) {
-    const existing = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
-
-    if (existing) {
+async function register(email, username, password) {
+    const existingUsername = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
+    if (existingUsername) {
         throw new Error('Username is taken!');
+    }
+
+    const existingEmail = await User.findOne({ email }).collation({ locale: 'en', strength: 2 });
+    if (existingEmail) {
+        throw new Error('Email is taken!');
     }
 
     const hashedPassword = await hash(password, SALT_ROUNDS);
 
-    const user = await User.create({ username, hashedPassword });
+    const user = await User.create({ email, username, hashedPassword });
     // const user = new User({ email, hashedPassword });
     // await user.save();
 
@@ -26,25 +30,25 @@ async function register(username, password) {
     return token;
 }
 
-async function login(username, password) {
-    const user = await User.findOne({ username }).collation({ locale: 'en', strength: 2 });
+async function login(email, password) {
+    const user = await User.findOne({ email }).collation({ locale: 'en', strength: 2 });
 
     if (!user) {
-        throw new Error('Incorrect username or password!');
+        throw new Error('Incorrect email, username or password!');
     }
 
     const hasMatch = await compare(password, user.hashedPassword);
 
     if (!hasMatch) {
-        throw new Error('Incorrect username or password!');
+        throw new Error('Incorrect email, username or password!');
     }
 
     // token
     return createSession(user);
 }
 
-function createSession({ _id, username }) {
-    const payload = { _id, username };
+function createSession({ _id, email, username }) {
+    const payload = { _id, email, username };
     const token = jwt.sign(payload, JWT_SECRET);
 
     return token;

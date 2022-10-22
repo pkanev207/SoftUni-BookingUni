@@ -8,6 +8,11 @@ async function getById(id) {
     return await Hotel.findById(id).lean();
 }
 
+async function getByUserBooking(userId) {
+    // mongoose search in array
+    return Hotel.find({ bookings: userId }).lean();
+}
+
 async function create(hotel) {
     return await Hotel.create(hotel);
 }
@@ -24,11 +29,18 @@ async function update(id, hotel) {
 }
 
 async function deleteById(id) {
-
+    await Hotel.findByIdAndDelete(id);
 }
 
 async function bookRoom(hotelId, userId) {
+    const hotel = await Hotel.findById(hotelId);
 
+    if (hotel.bookings.includes(userId)) {
+        throw new Error('Cannot book twice!');
+    }
+
+    hotel.bookings.push(userId);
+    await hotel.save();
 }
 
 module.exports = {
@@ -37,5 +49,6 @@ module.exports = {
     create,
     update,
     deleteById,
-    bookRoom
+    bookRoom,
+    getByUserBooking
 };

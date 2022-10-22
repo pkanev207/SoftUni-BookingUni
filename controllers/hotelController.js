@@ -1,12 +1,18 @@
 const router = require('express').Router();
 
-const { create, getById, update } = require('../services/hotelService');
+const { create, getById, update, deleteById, bookRoom } = require('../services/hotelService');
 const { parseError } = require('../util/errorParser');
 
 
 router.get('/:id/details', async (req, res) => {
     const hotel = await getById(req.params.id);
-    console.log(hotel);
+    // console.log(hotel);
+
+    if (hotel.owner == req.user._id) {
+        hotel.isOwner = true;
+    } else if (hotel.bookings.map(b => b.toString()).includes(req.user._id.toString())) {
+        hotel.isBooked = true;
+    }
 
     res.render('details', { title: 'Hotel Details', ...hotel });
 });
@@ -76,6 +82,42 @@ router.post('/:id/edit', async (req, res) => {
             title: 'Edit Hotel Again!',
             hotel: Object.assign(edited, { _id: req.params.id }),
             // because we need the id for the address to work,
+            errors: parseError(err),
+        });
+    }
+});
+
+router.get('/:id/delete', async (req, res) => { // /hotel/{{_id}}/delete
+    const hotel = await getById(req.params.id);
+
+    if (hotel.owner != req.user._id) {
+        return res.redirect('/auth/login');
+    }
+
+    await deleteById(req.params.id);
+    res.redirect('/');
+});
+
+router.get('/:id/book', async (req, res) => { // /hotel/{{_id}}/book
+    const hotel = await getById(req.params.id);
+
+    try {
+        if (hotel.owner == req.user._id) {
+            hotel.isOwner = true;
+            throw new Error('Cannot book your own hotel!');
+        }
+
+        if (hotel.bookings.map(b => b.toString()).includes(req.user._id.toString())) {
+            hotel.isBooked = true;
+            throw new Error('Cannot book twice!');
+        }
+
+        await bookRoom(req.params.id, req.user._id);
+        res.redirect(`/hotel/${req.params.id}/details`);
+    } catch (err) {
+        res.render('details', {
+            title: 'Hotel Details',
+            ...hotel,
             errors: parseError(err),
         });
     }
